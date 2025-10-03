@@ -13,6 +13,10 @@ function CanGainComboPoints(unit)
         return false
     end
 
+--[[     
     local form = GetShapeshiftFormID()
     return playerClass == 'ROGUE' or (playerClass == 'DRUID' and form == 1)
+ ]]
+    local form = GetShapeshiftForm()
+    return playerClass == 'ROGUE' or (playerClass == 'DRUID' and form == 2)
 end 

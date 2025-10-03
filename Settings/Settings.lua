@@ -270,9 +270,14 @@ end
 -- Create preset buttons
 local presetIcons =
   {
+--[[ 
     'Interface\\AddOns\\UltraHardcore\\textures\\skull' .. 1 .. '.png',
     'Interface\\AddOns\\UltraHardcore\\textures\\skull' .. 2 .. '.png',
     'Interface\\AddOns\\UltraHardcore\\textures\\skull' .. 3 .. '.png',
+ ]]    
+    'Interface\\AddOns\\UltraHardcore\\Textures\\skull' .. 1,
+    'Interface\\AddOns\\UltraHardcore\\Textures\\skull' .. 2,
+    'Interface\\AddOns\\UltraHardcore\\Textures\\skull' .. 3,
   }
 
 local buttonSize = 100 -- Increased size for better visibility
@@ -334,7 +339,13 @@ local function createCheckboxes()
   for _, checkboxItem in ipairs(settingsCheckboxOptions) do
     local checkbox = CreateFrame('CheckButton', nil, scrollChild, 'ChatConfigCheckButtonTemplate')
     checkbox:SetPoint('TOPLEFT', 10, yOffset)
+--[[ 
     checkbox.Text:SetText(checkboxItem.name)
+ ]]    
+    checkbox.label = checkbox:CreateFontString(nil , "BORDER", "GameFontNormal")
+    checkbox.label:SetJustifyH("LEFT")
+    checkbox.label:SetPoint("LEFT", 30, 0)
+    checkbox.label:SetText(checkboxItem.name)
     checkbox:SetChecked(GLOBAL_SETTINGS[checkboxItem.dbSettingsValueName])
 
     checkboxes[checkboxItem.dbSettingsValueName] = checkbox

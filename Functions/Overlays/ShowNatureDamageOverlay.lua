@@ -1,6 +1,9 @@
 local damageOverlayFrame = nil
 
+--[[ 
 function ShowShadowDamageOverlay()
+ ]]
+function ShowNatureDamageOverlay()
     if not damageOverlayFrame then
         local success, err = pcall(function()
             damageOverlayFrame = CreateFrame("Frame", "DamageOverlay", UIParent)
@@ -13,7 +16,10 @@ function ShowShadowDamageOverlay()
             if not damageOverlayFrame.texture then return end
             
             damageOverlayFrame.texture:SetAllPoints()
+--[[             
             damageOverlayFrame.texture:SetTexture("Interface\\AddOns\\UltraHardcore\\Textures\\nature-damage.png")
+ ]]
+            damageOverlayFrame.texture:SetTexture("Interface\\AddOns\\UltraHardcore\\Textures\\nature-damage")
             damageOverlayFrame:SetAlpha(0)
             damageOverlayFrame:Hide()
         end)

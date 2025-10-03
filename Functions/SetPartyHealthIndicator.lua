@@ -3,6 +3,7 @@
 
 -- Use the same health indicator steps as nameplates
 PARTY_HEALTH_INDICATOR_STEPS = {
+--[[   
   {health = 0, alpha = 1.0, texture = 'Interface\\AddOns\\UltraHardcore\\Textures\\health-icon-black.png'},
   {health = 0.2, alpha = 1.0, texture = 'Interface\\AddOns\\UltraHardcore\\Textures\\health-icon-red.png'},
   {health = 0.3, alpha = 0.8, texture = 'Interface\\AddOns\\UltraHardcore\\Textures\\health-icon-red.png'},
@@ -10,6 +11,14 @@ PARTY_HEALTH_INDICATOR_STEPS = {
   {health = 0.6, alpha = 0.4, texture = 'Interface\\AddOns\\UltraHardcore\\Textures\\health-icon-orange.png'},
   {health = 0.8, alpha = 0.2, texture = 'Interface\\AddOns\\UltraHardcore\\Textures\\health-icon-yellow.png'},
   {health = 1, alpha = 0.0, texture = 'Interface\\AddOns\\UltraHardcore\\Textures\\health-icon-yellow.png'},
+ ]]  
+  {health = 0, alpha = 1.0, texture = 'Interface\\AddOns\\UltraHardcore\\Textures\\health-icon-black'},
+  {health = 0.2, alpha = 1.0, texture = 'Interface\\AddOns\\UltraHardcore\\Textures\\health-icon-red'},
+  {health = 0.3, alpha = 0.8, texture = 'Interface\\AddOns\\UltraHardcore\\Textures\\health-icon-red'},
+  {health = 0.4, alpha = 0.6, texture = 'Interface\\AddOns\\UltraHardcore\\Textures\\health-icon-orange'},
+  {health = 0.6, alpha = 0.4, texture = 'Interface\\AddOns\\UltraHardcore\\Textures\\health-icon-orange'},
+  {health = 0.8, alpha = 0.2, texture = 'Interface\\AddOns\\UltraHardcore\\Textures\\health-icon-yellow'},
+  {health = 1, alpha = 0.0, texture = 'Interface\\AddOns\\UltraHardcore\\Textures\\health-icon-yellow'},
 }
 
 -- Cache of all party health indicators

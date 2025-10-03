@@ -13,7 +13,10 @@ function ShowPhysicalDamageOverlay()
             if not damageOverlayFrame.texture then return end
             
             damageOverlayFrame.texture:SetAllPoints()
+--[[             
             damageOverlayFrame.texture:SetTexture("Interface\\AddOns\\UltraHardcore\\Textures\\physical-damage.png")
+ ]]
+            damageOverlayFrame.texture:SetTexture("Interface\\AddOns\\UltraHardcore\\Textures\\physical-damage")
             damageOverlayFrame:SetAlpha(0)
             damageOverlayFrame:Hide()
         end)

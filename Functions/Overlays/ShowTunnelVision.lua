@@ -68,7 +68,10 @@ function ShowTunnelVision(blurIntensity)
     'Interface\\AddOns\\UltraHardcore\\textures\\tinted_foggy_' .. string.format(
       '%02d',
       blurIntensity
+--[[ 
     ) .. '.png'
+ ]]    
+    )
   
   inactiveFrame.texture:SetTexture(texturePath)
   inactiveFrame:SetAlpha(0)

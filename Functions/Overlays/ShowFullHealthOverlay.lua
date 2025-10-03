@@ -13,7 +13,10 @@ function ShowFullHealthOverlay()
             if not fullHealthOverlayFrame.texture then return end
             
             fullHealthOverlayFrame.texture:SetAllPoints()
+--[[             
             fullHealthOverlayFrame.texture:SetTexture("Interface\\AddOns\\UltraHardcore\\Textures\\full-health-overlay.png")
+ ]]
+            fullHealthOverlayFrame.texture:SetTexture("Interface\\AddOns\\UltraHardcore\\Textures\\full-health-overlay")
             fullHealthOverlayFrame:SetAlpha(0)
             fullHealthOverlayFrame:Hide()
         end)

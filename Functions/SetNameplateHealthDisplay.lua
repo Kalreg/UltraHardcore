@@ -28,23 +28,38 @@ function SetNameplateHealthDisplay(disabled)
 end
 
 function ProcessNameplate(nameplate)
+--[[     
     if not nameplate or not nameplate.UnitFrame then
+ ]]
+    if not nameplate or not nameplate._unit then
         return
     end
 
-    local unitFrame = nameplate.UnitFrame
+--[[    
+    local unitFrame = nameplate.UnitFrame 
     local unit = nameplate.namePlateUnitToken
-    
+ ]]
+    local unit = nameplate._unit
+
     if not unit or not UnitExists(unit) then
         return
     end
 
+    -- local healthBar, castBar = nameplate:GetChildren()
+    local healthBar = select(1, nameplate:GetChildren())
+    -- local glowRegion, overlayRegion, castbarOverlay, shieldedRegion, spellIconRegion, highlightRegion, nameTextRegion, levelTextRegion, bossIconRegion, raidIconRegion, stateIconRegion = nameplate:GetRegions()
+    local levelTextRegion = select(8,nameplate:GetRegions())
+
     -- Process both enemy and allied units
     -- Check if this nameplate is already processed
+--[[ 
     if modifiedNameplates[nameplate] then
+ ]]        
+    if modifiedNameplates[unit] then
         return
     end
 
+--[[ 
     -- Store original states
     modifiedNameplates[nameplate] = {
         healthBar = unitFrame.healthBar,
@@ -54,15 +69,22 @@ function ProcessNameplate(nameplate)
         originalHealthBarSetValue = unitFrame.healthBar.SetValue,
         originalHealthBarSetMinMaxValues = unitFrame.healthBar.SetMinMaxValues
     }
-
+    
+ ]]
+    modifiedNameplates[unit] = {
+        healthBar = healthBar,
+        levelFrame = levelTextRegion,
+    }
     -- Hide level frame completely
+    levelTextRegion:Hide()
+--[[ 
     unitFrame.LevelFrame:Hide()
     unitFrame.LevelFrame.Show = function() end
     
     -- Store original functions for restoration
     local originalSetValue = unitFrame.healthBar.SetValue
     local originalSetMinMaxValues = unitFrame.healthBar.SetMinMaxValues
-    
+
     -- Override health bar functions to keep it at 100%
     unitFrame.healthBar.SetValue = function(self, value)
         -- Always set to 100% (1.0)
@@ -77,6 +99,8 @@ function ProcessNameplate(nameplate)
     -- Force health bar to show at 100%
     unitFrame.healthBar:SetMinMaxValues(0, 1)
     unitFrame.healthBar:SetValue(1.0)
+ ]]
+    healthBar:SetValue(select(2, healthBar:GetMinMaxValues()))
 end
 
 function RestoreNameplate(nameplate)
@@ -87,9 +111,11 @@ function RestoreNameplate(nameplate)
     local data = modifiedNameplates[nameplate]
     
     -- Restore original functions
+--[[ 
     data.healthBar.SetValue = data.originalHealthBarSetValue
     data.healthBar.SetMinMaxValues = data.originalHealthBarSetMinMaxValues
     data.levelFrame.Show = data.originalLevelFrameShow
+ ]]
     
     -- Show the level frame
     data.levelFrame:Show()
@@ -102,6 +128,7 @@ end
 local nameplateFrame = CreateFrame('Frame')
 nameplateFrame:RegisterEvent('NAME_PLATE_UNIT_ADDED')
 nameplateFrame:RegisterEvent('NAME_PLATE_UNIT_REMOVED')
+nameplateFrame:RegisterEvent('UNIT_HEALTH')
 
 nameplateFrame:SetScript('OnEvent', function(self, event, unit)
     -- Only process events if the setting is enabled
@@ -115,9 +142,16 @@ nameplateFrame:SetScript('OnEvent', function(self, event, unit)
             ProcessNameplate(nameplate)
         end
     elseif event == 'NAME_PLATE_UNIT_REMOVED' then
+        RestoreNameplate(unit)
+--[[ 
         local nameplate = GetNamePlateForUnit(unit)
         if nameplate and modifiedNameplates[nameplate] then
             RestoreNameplate(nameplate)
         end
+ ]]
+    elseif event == 'UNIT_HEALTH' and unit:startswith('nameplate') then
+        local healthBar = modifiedNameplates[unit].healthBar
+        local maxhealth = select(2, healthBar:GetMinMaxValues())
+        healthBar:SetValue(maxhealth)
     end
 end)

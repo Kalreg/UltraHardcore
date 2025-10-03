@@ -26,7 +26,10 @@ GLOBAL_SETTINGS = {
 }
 
 UltraHardcore:RegisterEvent('UNIT_AURA')
+--[[ 
 UltraHardcore:RegisterEvent('UNIT_HEALTH_FREQUENT')
+ ]]
+UltraHardcore:RegisterEvent('UNIT_HEALTH')
 UltraHardcore:RegisterEvent('PLAYER_ENTERING_WORLD')
 UltraHardcore:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED')
 UltraHardcore:RegisterEvent('ADDON_LOADED')
@@ -38,11 +41,16 @@ UltraHardcore:RegisterEvent('PLAYER_LEVEL_UP')
 UltraHardcore:RegisterEvent('GROUP_ROSTER_UPDATE')
 UltraHardcore:RegisterEvent('MIRROR_TIMER_START')
 UltraHardcore:RegisterEvent('MIRROR_TIMER_STOP')
+UltraHardcore:RegisterEvent('UNIT_COMBAT')
 
 
 -- 🟢 Event handler to apply all funcitons on login
+--[[ 
 UltraHardcore:SetScript('OnEvent', function(self, event, unit)
   if event == 'PLAYER_ENTERING_WORLD' or event == 'ADDON_LOADED' then
+ ]]  
+UltraHardcore:SetScript('OnEvent', function(self, event, unit, ...)
+  if event == 'PLAYER_ENTERING_WORLD' or (event == 'ADDON_LOADED' and unit == 'UltraHardcore') then
     LoadDBData()
     ShowWelcomeMessage()
     SetPlayerFrameDisplay(GLOBAL_SETTINGS.hidePlayerFrame or false)
@@ -56,13 +64,22 @@ UltraHardcore:SetScript('OnEvent', function(self, event, unit)
     SetNameplateHealthDisplay(GLOBAL_SETTINGS.disableNameplateHealth or false)
     SetAllPartyHealthIndicators(true)
     SetAllPartyTargetHighlights(true)
+--[[     
   elseif event == 'UNIT_HEALTH_FREQUENT' then
+ ]]
+  elseif event == 'UNIT_HEALTH' and unit == 'player' then
     TunnelVision(self, event, unit, GLOBAL_SETTINGS.showTunnelVision or false)
     FullHealthReachedIndicator(GLOBAL_SETTINGS.showFullHealthIndicator, self, event, unit)
   elseif event == 'QUEST_WATCH_UPDATE' or event == 'QUEST_LOG_UPDATE' then
     SetQuestDisplay(GLOBAL_SETTINGS.hideQuestFrame or false)
   elseif event == 'COMBAT_LOG_EVENT_UNFILTERED' then
+--[[     
     OnCombatLogEvent(self, event)
+ ]]
+    -- local arg = {unit, ...}
+    OnCombatLogEvent(self, event, ...)
+  elseif event == 'UNIT_COMBAT' and unit == 'player' then
+    OnCriticalLogEvent(self, event, ...)
   elseif event == 'PLAYER_UPDATE_RESTING' then
     OnPlayerUpdateRestingEvent(self, event, GLOBAL_SETTINGS.hideActionBars)
   elseif event == 'PLAYER_LEVEL_UP' then

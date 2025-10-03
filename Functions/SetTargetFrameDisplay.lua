@@ -1,17 +1,20 @@
 function SetTargetFrameDisplay(hide)
   if not hide then return end
 
+--[[ 
   -- Function to forcibly hide both Target Frame and Target of Target Frame
   local function HideTargetFrames()
     TargetFrame:Hide()
     TargetFrameToT:Hide()
   end
-
+ ]]
+ 
   -- Completely block Blizzard's attempts to show the frame
   TargetFrame:UnregisterAllEvents()
   TargetFrameToT:UnregisterAllEvents()
 
-  -- Override Show() function so the frames can never appear
+--[[
+-- Override Show() function so the frames can never appear
   TargetFrame:SetScript('OnShow', function(self)
     self:Hide()
   end)
@@ -39,4 +42,5 @@ function SetTargetFrameDisplay(hide)
 
   -- Hard override: Force-hide every frame
   frameHider:SetScript('OnUpdate', HideTargetFrames)
+ ]]
 end

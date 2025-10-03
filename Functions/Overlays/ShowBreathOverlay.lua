@@ -29,14 +29,16 @@ function ShowBreathOverlay(breathPercent)
     local breathRatio = (80 - breathPercent) / 80 -- Scale from 0-1 as breath goes from 80% to 0%
     alpha = math.max(0, math.pow(breathRatio, 3.5) * 0.8) -- Even more gradual curve
   end
-  
+
   if alpha > 0 then
     -- Show red-tinted overlay (more dramatic and urgent)
     UltraHardcore.breathOverlayFrame.texture:SetColorTexture(0.8, 0.2, 0.2, alpha)
     UltraHardcore.breathOverlayFrame:Show()
+--[[ 
   else
     -- Hide overlay when breath is full
     UltraHardcore.breathOverlayFrame:Hide()
+ ]]    
   end
 end
 
@@ -64,12 +66,15 @@ function OnBreathUpdate(self, elapsed)
     if progress and progress > 0 then
       -- Progress appears to be time remaining in milliseconds
       -- Let's estimate total breath duration and calculate percentage
+--[[ 
       local estimatedTotalDuration = 90000 -- 90 seconds in milliseconds (typical max breath)
+ ]]      
+      local estimatedTotalDuration = 180000 -- 180 seconds in milliseconds (typical max breath)
       local breathPercent = (progress / estimatedTotalDuration) * 100
       
       -- Clamp the percentage to 0-100
       breathPercent = math.max(0, math.min(100, breathPercent))
-      
+
       -- Show red-tinted overlay (higher breath = less red, lower breath = more red)
       ShowBreathOverlay(breathPercent)
     else
@@ -85,7 +90,12 @@ function OnBreathStart()
   ShowBreathOverlay(100) -- Start with full breath
   
   if UltraHardcore.breathOverlayFrame then
+--[[ 
     UltraHardcore.breathOverlayFrame:SetScript("OnUpdate", OnBreathUpdate)
+ ]]
+    UltraHardcore.breathOverlayFrame:HookScript("OnUpdate", function (self, elapsed)
+      OnBreathUpdate(self, elapsed)
+    end)
     UltraHardcore.breathOverlayFrame:Show() -- Make sure frame is visible
   end
 end

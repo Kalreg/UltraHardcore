@@ -2,12 +2,20 @@ local GetNamePlateForUnit   = _G.C_NamePlate.GetNamePlateForUnit
 
 -- in line with the own death indicator (health ratio to icon alpha)
 NAME_PLATE_HEALTH_INDICATOR_STEPS =  {
+--[[ 
   {health = 0.2, alpha = 1.0, texture = 'Interface\\AddOns\\UltraHardcore\\Textures\\health-icon-red.png'},
   {health = 0.4, alpha = 0.8, texture = 'Interface\\AddOns\\UltraHardcore\\Textures\\health-icon-red.png'},
   {health = 0.5, alpha = 0.6, texture = 'Interface\\AddOns\\UltraHardcore\\Textures\\health-icon-orange.png'},
   {health = 0.7, alpha = 0.4, texture = 'Interface\\AddOns\\UltraHardcore\\Textures\\health-icon-orange.png'},
   {health = 0.9, alpha = 0.2, texture = 'Interface\\AddOns\\UltraHardcore\\Textures\\health-icon-yellow.png'},
   {health = 1, alpha = 0.0, texture = 'Interface\\AddOns\\UltraHardcore\\Textures\\health-icon-yellow.png'},
+ ]]  
+  {health = 0.2, alpha = 1.0, texture = 'Interface\\AddOns\\UltraHardcore\\Textures\\health-icon-red'},
+  {health = 0.4, alpha = 0.8, texture = 'Interface\\AddOns\\UltraHardcore\\Textures\\health-icon-red'},
+  {health = 0.5, alpha = 0.6, texture = 'Interface\\AddOns\\UltraHardcore\\Textures\\health-icon-orange'},
+  {health = 0.7, alpha = 0.4, texture = 'Interface\\AddOns\\UltraHardcore\\Textures\\health-icon-orange'},
+  {health = 0.9, alpha = 0.2, texture = 'Interface\\AddOns\\UltraHardcore\\Textures\\health-icon-yellow'},
+  {health = 1, alpha = 0.0, texture = 'Interface\\AddOns\\UltraHardcore\\Textures\\health-icon-yellow'},
 }
 
 -- cache of all nameplate indicators

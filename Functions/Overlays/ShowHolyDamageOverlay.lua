@@ -13,7 +13,10 @@ function ShowHolyDamageOverlay()
             if not damageOverlayFrame.texture then return end
             
             damageOverlayFrame.texture:SetAllPoints()
+--[[             
             damageOverlayFrame.texture:SetTexture("Interface\\AddOns\\UltraHardcore\\Textures\\holy-damage.png")
+ ]]
+            damageOverlayFrame.texture:SetTexture("Interface\\AddOns\\UltraHardcore\\Textures\\holy-damage")
             damageOverlayFrame:SetAlpha(0)
             damageOverlayFrame:Hide()
         end)

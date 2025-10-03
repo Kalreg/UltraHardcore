@@ -56,7 +56,10 @@ end
 
 -- Get the current character's stats
 function CharacterStats:GetCurrentCharacterStats()
+--[[ 
   local characterGUID = UnitGUID('player')
+ ]]  
+  local characterGUID = UnitGUID('player') or ''
   
   -- Initialize character stats if they don't exist
   if not UltraHardcoreDB.characterStats then

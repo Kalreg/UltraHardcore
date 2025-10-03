@@ -34,7 +34,10 @@ function ApplyDeathIndicatorChange(blurIntensity)
     'Interface\\AddOns\\UltraHardcore\\textures\\tinted_foggy_' .. string.format(
       '%02d',
       blurIntensity
+--[[       
     ) .. '.png'
+ ]]
+    )
 
   if isDeathIndicatorVisible then
     -- Fade out the deathIndicatorFrame and fade in the backupDeathIndicatorFrame

@@ -13,7 +13,10 @@ function ShowShadowDamageOverlay()
             if not damageOverlayFrame.texture then return end
             
             damageOverlayFrame.texture:SetAllPoints()
+--[[             
             damageOverlayFrame.texture:SetTexture("Interface\\AddOns\\UltraHardcore\\Textures\\shadow-damage.png")
+ ]]
+            damageOverlayFrame.texture:SetTexture("Interface\\AddOns\\UltraHardcore\\Textures\\shadow-damage")
             damageOverlayFrame:SetAlpha(0)
             damageOverlayFrame:Hide()
         end)

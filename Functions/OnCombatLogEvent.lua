@@ -11,11 +11,15 @@ messageText:SetJustifyH('CENTER') -- Center the text
 --
 local incomingSpellTimer
 --
+--[[ 
 function OnCombatLogEvent(self, event)
   local _, subEvent, _, sourceGUID, _, _, _, destGUID, enemyName, _, _, spellID, a, b, c, d, e, f =
     CombatLogGetCurrentEventInfo()
 
   amount, _, _, _, _, _, critical = select(12, CombatLogGetCurrentEventInfo())
+ ]]  
+function OnCombatLogEvent(self, event, ...)
+  local subEvent, destGUID = select(1, ...), select(5, ...)
 
   -- Incoming spell damage
   if GLOBAL_SETTINGS.showIncomingDamageEffect then
@@ -26,7 +30,10 @@ function OnCombatLogEvent(self, event)
     end
     if subEvent == 'SPELL_DAMAGE' or subEvent == 'SPELL_PERIODIC_DAMAGE' then
       if destGUID == UnitGUID('player') then
+--[[ 
         local school = select(15, CombatLogGetCurrentEventInfo())
+ ]]        
+        local school = select(13, ...)
         local schoolNames = {
           [2] = "Fire",
           [3] = "Fire",
@@ -73,6 +80,7 @@ function OnCombatLogEvent(self, event)
     end
   end
 
+--[[ 
   -- Critical hit!
   if GLOBAL_SETTINGS.showCritScreenMoveEffect then
     if subEvent == 'SWING_DAMAGE' or subEvent == 'SPELL_DAMAGE' then
@@ -81,6 +89,7 @@ function OnCombatLogEvent(self, event)
       end
     end
   end
+ ]]
 
   -- Party kill
   if subEvent == 'PARTY_KILL' then
@@ -95,6 +104,7 @@ function OnCombatLogEvent(self, event)
 
   -- Dazed!
   if GLOBAL_SETTINGS.showDazedEffect then
+    local spellID = select(8, ...)
     if subEvent == 'SPELL_AURA_APPLIED' and destGUID == UnitGUID('player') and spellID == 1604 then
       ShowDazedOverlay(true) -- Dazed, enable blur
     elseif subEvent == 'SPELL_AURA_REMOVED' and destGUID == UnitGUID(

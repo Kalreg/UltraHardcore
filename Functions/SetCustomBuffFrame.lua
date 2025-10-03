@@ -6,6 +6,7 @@ end
 
 function SetBuffFrame()
   -- Make the buff frame draggable
+--[[ 
   BuffFrame:SetMovable(true)
   BuffFrame:EnableMouse(true)
   BuffFrame:RegisterForDrag('LeftButton')
@@ -18,5 +19,10 @@ function SetBuffFrame()
 
   BuffFrame:ClearAllPoints()
   BuffFrame:SetPoint('BOTTOMRIGHT', UIParent, 'BOTTOMRIGHT', -175, 90)
+ ]]  
 
+  BuffFrame:ClearAllPoints()
+  BuffFrame:SetPoint('BOTTOMRIGHT', UIParent, 'BOTTOMRIGHT', -175, 130)
+  BuffFrame.SetPoint = function() end
+  
 end

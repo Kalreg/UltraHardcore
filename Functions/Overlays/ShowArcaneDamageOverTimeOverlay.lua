@@ -13,7 +13,10 @@ function ShowArcaneDamageOverTimeOverlay()
             if not damageOverlayFrame.texture then return end
             
             damageOverlayFrame.texture:SetAllPoints()
+--[[ 
             damageOverlayFrame.texture:SetTexture("Interface\\AddOns\\UltraHardcore\\Textures\\arcane-dot.png")
+ ]]            
+            damageOverlayFrame.texture:SetTexture("Interface\\AddOns\\UltraHardcore\\Textures\\arcane-dot")
             damageOverlayFrame:SetAlpha(0)
             damageOverlayFrame:Hide()
         end)

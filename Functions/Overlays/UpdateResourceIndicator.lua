@@ -4,7 +4,10 @@ resourceIndicator:SetPoint('BOTTOMRIGHT', UIParent, 'BOTTOMRIGHT', -20, 70)
 resourceIndicator:Hide()
 local icon = resourceIndicator:CreateTexture(nil, 'OVERLAY')
 icon:SetSize(125, 125) -- Size of the single icon
+--[[ 
 icon:SetTexture('Interface\\AddOns\\UltraHardcore\\textures\\bonnie0.png') -- Default texture
+ ]]
+icon:SetTexture('Interface\\AddOns\\UltraHardcore\\textures\\bonnie0') -- Default texture
 icon:SetAlpha(1) -- Fully visible
 resourceIndicator.icon = icon
 icon:SetPoint('CENTER', resourceIndicator, 'CENTER', 0, 0)
@@ -26,7 +29,10 @@ local function UpdateManaPoints()
   local value = UnitPower('player', Enum.PowerType.Mana)
   local maxValue = UnitPowerMax('player', Enum.PowerType.Mana)
   local manaStep = math.ceil((value / maxValue) * 5) -- Scale 0-100% into 5 thresholds
+--[[   
   local newTexture = 'Interface\\AddOns\\UltraHardcore\\textures\\bonnie' .. manaStep .. '.png'
+ ]]
+  local newTexture = 'Interface\\AddOns\\UltraHardcore\\textures\\bonnie' .. manaStep
   SmoothTextureUpdate(newTexture)
 end
 
@@ -35,7 +41,10 @@ local function UpdateEnergyPoints()
   local value = UnitPower('player', Enum.PowerType.Energy)
   local maxValue = UnitPowerMax('player', Enum.PowerType.Energy)
   local energyStep = math.ceil((value / maxValue) * 5) -- Scale 0-100% into 5 thresholds
+--[[   
   local newTexture = 'Interface\\AddOns\\UltraHardcore\\textures\\bonnie' .. energyStep .. '.png'
+ ]]
+  local newTexture = 'Interface\\AddOns\\UltraHardcore\\textures\\bonnie' .. energyStep
   SmoothTextureUpdate(newTexture)
 end
 
@@ -44,7 +53,10 @@ local function UpdateRagePoints()
   local value = UnitPower('player', Enum.PowerType.Rage)
   local maxValue = UnitPowerMax('player', Enum.PowerType.Rage)
   local rageStep = math.ceil((value / maxValue) * 5) -- Scale 0-100% into 5 thresholds
+--[[   
   local newTexture = 'Interface\\AddOns\\UltraHardcore\\textures\\bonnie' .. rageStep .. '.png'
+ ]]
+  local newTexture = 'Interface\\AddOns\\UltraHardcore\\textures\\bonnie' .. rageStep
   SmoothTextureUpdate(newTexture)
 end
 
@@ -66,11 +78,20 @@ resourceIndicator:SetScript('OnEvent', function(self, event, unit)
 
   if event == 'PLAYER_ENTERING_WORLD' then
     if powerType == 'ENERGY' then
+--[[ 
       icon:SetTexture('Interface\\AddOns\\UltraHardcore\\textures\\bonnie' .. 5 .. '.png')
+ ]]
+      icon:SetTexture('Interface\\AddOns\\UltraHardcore\\textures\\bonnie' .. 5)
     elseif powerType == 'RAGE' then
+--[[ 
       icon:SetTexture('Interface\\AddOns\\UltraHardcore\\textures\\bonnie' .. 0 .. '.png')
+ ]]
+      icon:SetTexture('Interface\\AddOns\\UltraHardcore\\textures\\bonnie' .. 0)
     elseif powerType == 'MANA' then
+--[[ 
       icon:SetTexture('Interface\\AddOns\\UltraHardcore\\textures\\bonnie' .. 5 .. '.png')
+ ]]
+      icon:SetTexture('Interface\\AddOns\\UltraHardcore\\textures\\bonnie' .. 5)
     end
   elseif unit == 'player' and powerType == 'ENERGY' then
     UpdateEnergyPoints()
