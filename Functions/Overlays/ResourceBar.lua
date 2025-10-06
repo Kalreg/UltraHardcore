@@ -56,8 +56,12 @@ end
 
 local function CanGainComboPoints()
   local _, playerClass = UnitClass('player')
+--[[ 
   local form = GetShapeshiftFormID()
   if playerClass == 'ROGUE' or (playerClass == 'DRUID' and form == 1) then
+ ]]    
+  local form = GetShapeshiftForm()
+  if playerClass == 'ROGUE' or (playerClass == 'DRUID' and form == 2) then
     return true
   end
   return nil

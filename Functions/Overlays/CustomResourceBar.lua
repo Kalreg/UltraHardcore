@@ -106,7 +106,12 @@ end
 
 -- Event Handling
 resourceBar:RegisterEvent('PLAYER_ENTERING_WORLD')
+--[[ 
 resourceBar:RegisterEvent('UNIT_POWER_FREQUENT')
+ ]]
+resourceBar:RegisterEvent('UNIT_MANA')
+resourceBar:RegisterEvent('UNIT_RAGE')
+resourceBar:RegisterEvent('UNIT_ENERGY')
 comboFrame:RegisterEvent('PLAYER_TARGET_CHANGED')
 
 resourceBar:SetScript('OnEvent', function(self, event, unit)
@@ -123,7 +128,10 @@ resourceBar:SetScript('OnEvent', function(self, event, unit)
     if event == 'PLAYER_ENTERING_WORLD' then
         HideComboPointsForNonUsers()
         UpdateResourcePoints()
+--[[ 
     elseif event == 'UNIT_POWER_FREQUENT' and unit == 'player' then
+ ]]        
+    elseif (event == 'UNIT_MANA' or event == 'UNIT_RAGE' or event == 'UNIT_ENERGY') and unit == 'player' then
         UpdateResourcePoints()
     end
 end)
