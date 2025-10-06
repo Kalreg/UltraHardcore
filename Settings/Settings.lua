@@ -20,7 +20,7 @@ local settingsCheckboxOptions = { {
   name = 'Hide Target Tooltips',
   dbSettingsValueName = 'hideTargetTooltip',
 }, {
-  name = 'Disable Nameplate Information',
+  name = 'Disable Nameplates',
   dbSettingsValueName = 'disableNameplateHealth',
 }, {
   name = 'Show Dazed effect',
@@ -55,6 +55,9 @@ local settingsCheckboxOptions = { {
 }, {
   name = 'Use UHC Incoming Damage Effect',
   dbSettingsValueName = 'showIncomingDamageEffect',
+}, {
+  name = 'Use UHC Incoming Healing Effect',
+  dbSettingsValueName = 'showHealingIndicator',
 } }
 
 local presets = { {
@@ -75,6 +78,7 @@ local presets = { {
   showFullHealthIndicator = false,
   disableNameplateHealth = false,
   showIncomingDamageEffect = false,
+  showHealingIndicator = false,
   hideBreathIndicator = false,
   showOnScreenStatistics = true,
 }, {
@@ -95,6 +99,7 @@ local presets = { {
   showFullHealthIndicator = false,
   disableNameplateHealth = true,
   showIncomingDamageEffect = false,
+  showHealingIndicator = false,
   hideBreathIndicator = true,
   showOnScreenStatistics = true,
 }, {
@@ -109,6 +114,7 @@ local presets = { {
   showFullHealthIndicator = true,
   disableNameplateHealth = true,
   showIncomingDamageEffect = true,
+  showHealingIndicator = true,
   hideQuestFrame = true,
   showDazedEffect = true,
   showCritScreenMoveEffect = true,
@@ -118,6 +124,16 @@ local presets = { {
   hideBreathIndicator = true,
   showOnScreenStatistics = true,
 } }
+
+-- Temporary settings storage and initialization function
+local tempSettings = {}
+
+local function initializeTempSettings()
+  -- Copy current GLOBAL_SETTINGS to temporary storage
+  for key, value in pairs(GLOBAL_SETTINGS) do
+    tempSettings[key] = value
+  end
+end
 
 local settingsFrame = CreateFrame('Frame', nil, UIParent, 'BackdropTemplate')
 settingsFrame:SetSize(400, 650)
@@ -224,6 +240,8 @@ local closeButton = CreateFrame('Button', nil, titleBar, 'UIPanelCloseButton')
 closeButton:SetPoint('RIGHT', titleBar, 'RIGHT', -4, 0)
 closeButton:SetSize(32, 32)
 closeButton:SetScript('OnClick', function()
+  -- Discard temporary changes by reinitializing temp settings
+  initializeTempSettings()
   settingsFrame:Hide()
 end)
 
@@ -246,15 +264,18 @@ local function updateCheckboxes()
   for _, checkboxItem in ipairs(settingsCheckboxOptions) do
     local checkbox = checkboxes[checkboxItem.dbSettingsValueName]
     if checkbox then
-      checkbox:SetChecked(GLOBAL_SETTINGS[checkboxItem.dbSettingsValueName])
+      checkbox:SetChecked(tempSettings[checkboxItem.dbSettingsValueName])
     end
   end
 end
 
 local function applyPreset(presetIndex)
-  GLOBAL_SETTINGS = presets[presetIndex]
-
   if not presets[presetIndex] then return end
+
+  -- Copy preset to temporary settings
+  for key, value in pairs(presets[presetIndex]) do
+    tempSettings[key] = value
+  end
 
   -- Update checkboxes
   updateCheckboxes()
@@ -335,12 +356,12 @@ local function createCheckboxes()
     local checkbox = CreateFrame('CheckButton', nil, scrollChild, 'ChatConfigCheckButtonTemplate')
     checkbox:SetPoint('TOPLEFT', 10, yOffset)
     checkbox.Text:SetText(checkboxItem.name)
-    checkbox:SetChecked(GLOBAL_SETTINGS[checkboxItem.dbSettingsValueName])
+    checkbox:SetChecked(tempSettings[checkboxItem.dbSettingsValueName])
 
     checkboxes[checkboxItem.dbSettingsValueName] = checkbox
 
     checkbox:SetScript('OnClick', function(self)
-      GLOBAL_SETTINGS[checkboxItem.dbSettingsValueName] = self:GetChecked()
+      tempSettings[checkboxItem.dbSettingsValueName] = self:GetChecked()
     end)
 
     yOffset = yOffset - 30
@@ -352,9 +373,47 @@ saveButton:SetSize(120, 30)
 saveButton:SetPoint('BOTTOM', settingsFrame, 'BOTTOM', 0, 10)
 saveButton:SetText('Save')
 saveButton:SetScript('OnClick', function()
+  -- Copy temporary settings to GLOBAL_SETTINGS
+  for key, value in pairs(tempSettings) do
+    GLOBAL_SETTINGS[key] = value
+  end
+  
   UltraHardcoreDB.GLOBAL_SETTINGS = GLOBAL_SETTINGS
   SaveDBData('GLOBAL_SETTINGS', GLOBAL_SETTINGS)
   ReloadUI()
+end)
+
+-- Add Log Stats button next to Save button (with file icon)
+local logStatsButton = CreateFrame('Button', nil, settingsFrame, 'BackdropTemplate')
+logStatsButton:SetSize(30, 30)
+logStatsButton:SetPoint('BOTTOMRIGHT', settingsFrame, 'BOTTOMRIGHT', -10, 10)
+logStatsButton:SetBackdrop({
+  edgeFile = 'Interface\\Tooltips\\UI-Tooltip-Border',
+  edgeSize = 8,
+})
+logStatsButton:SetBackdropBorderColor(0.5, 0.5, 0.5)
+
+-- Add file icon texture (UI button style)
+local fileIcon = logStatsButton:CreateTexture(nil, 'ARTWORK')
+fileIcon:SetAllPoints()
+fileIcon:SetTexture('Interface\\Buttons\\UI-Panel-BiggerButton-Up') -- UI button style
+
+-- Add tooltip
+logStatsButton:SetScript('OnEnter', function()
+  GameTooltip:SetOwner(logStatsButton, 'ANCHOR_RIGHT')
+  GameTooltip:SetText('Log UHC Stats to Chat')
+  GameTooltip:Show()
+end)
+logStatsButton:SetScript('OnLeave', function()
+  GameTooltip:Hide()
+end)
+
+logStatsButton:SetScript('OnClick', function()
+  if CharacterStats and CharacterStats.LogStatsToChat then
+    CharacterStats:LogStatsToChat()
+  else
+    print("UHC - CharacterStats not available. Please reload UI.")
+  end
 end)
 
 -- Update the lowest health display
@@ -388,6 +447,15 @@ function ToggleSettings()
   if settingsFrame:IsShown() then
     settingsFrame:Hide()
   else
+    -- Initialize temporary settings when opening
+    initializeTempSettings()
+    
+    -- Reset preset button highlighting
+    if selectedPreset then
+      selectedPreset:SetBackdropBorderColor(0.5, 0.5, 0.5) -- Reset previous
+      selectedPreset = nil
+    end
+    
     settingsFrame:Show()
     updateCheckboxes()
     UpdateLowestHealthDisplay()
@@ -397,4 +465,6 @@ end
 SLASH_TOGGLESETTINGS1 = '/uhc'
 SlashCmdList['TOGGLESETTINGS'] = ToggleSettings
 
+-- Initialize temporary settings and create checkboxes
+initializeTempSettings()
 createCheckboxes()

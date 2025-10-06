@@ -16,6 +16,7 @@ GLOBAL_SETTINGS = {
   showDazedEffect = true,
   showCritScreenMoveEffect = true,
   showIncomingDamageEffect = true,
+  showHealingIndicator = false,
   hideUIErrors = true,
   petsDiePermanently = false,
   hideActionBars = false,
@@ -53,20 +54,22 @@ UltraHardcore:SetScript('OnEvent', function(self, event, unit)
     SetUIErrorsDisplay(GLOBAL_SETTINGS.hideUIErrors or false)
     SetActionBarVisibility(GLOBAL_SETTINGS.hideActionBars or false)
     SetBreathBarDisplay(GLOBAL_SETTINGS.hideBreathIndicator or false)
-    SetNameplateHealthDisplay(GLOBAL_SETTINGS.disableNameplateHealth or false)
+    SetNameplateDisabled(GLOBAL_SETTINGS.disableNameplateHealth or false)
     SetAllPartyHealthIndicators(true)
     SetAllPartyTargetHighlights(true)
   elseif event == 'UNIT_HEALTH_FREQUENT' then
     TunnelVision(self, event, unit, GLOBAL_SETTINGS.showTunnelVision or false)
     FullHealthReachedIndicator(GLOBAL_SETTINGS.showFullHealthIndicator, self, event, unit)
-  elseif event == 'QUEST_WATCH_UPDATE' or event == 'QUEST_LOG_UPDATE' then
-    SetQuestDisplay(GLOBAL_SETTINGS.hideQuestFrame or false)
   elseif event == 'COMBAT_LOG_EVENT_UNFILTERED' then
     OnCombatLogEvent(self, event)
+    HealingIndicator(GLOBAL_SETTINGS.showHealingIndicator, self, event)
+  elseif event == 'QUEST_WATCH_UPDATE' or event == 'QUEST_LOG_UPDATE' then
+    SetQuestDisplay(GLOBAL_SETTINGS.hideQuestFrame or false)
   elseif event == 'PLAYER_UPDATE_RESTING' then
     OnPlayerUpdateRestingEvent(self, event, GLOBAL_SETTINGS.hideActionBars)
   elseif event == 'PLAYER_LEVEL_UP' then
     OnPlayerLevelUpEvent(self, event, GLOBAL_SETTINGS.hideActionBars, unit)
+    AnnounceLevelUpToGuild()
   elseif event == 'GROUP_ROSTER_UPDATE' then
     SetPartyFramesInfo(GLOBAL_SETTINGS.hideGroupHealth or false)
     SetAllPartyHealthIndicators(true)
